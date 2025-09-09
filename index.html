@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jornal R1 - Seja um Jornalista</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -220,15 +218,12 @@
 </head>
 <body class="antialiased">
 
-    <!-- Tela de Carregamento -->
     <div id="preloader">
         <canvas id="preloader-canvas"></canvas>
     </div>
 
-    <!-- Fundo de Gradiente Vivo -->
     <canvas id="background-canvas"></canvas>
 
-    <!-- Header -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-sm">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center">
@@ -242,7 +237,6 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
         <section class="min-h-screen flex items-center justify-center text-center overflow-hidden">
             <div id="hero-content" class="container mx-auto px-6 relative z-10 transition-transform duration-300 ease-out">
                 <div class="reveal floating">
@@ -260,21 +254,17 @@
             </div>
         </section>
 
-        <!-- Seção de Inscrição com Abas -->
         <section id="inscricao" class="py-24 relative z-10">
             <div class="container mx-auto px-6">
                 <div class="max-w-4xl mx-auto main-card rounded-2xl reveal overflow-hidden">
-                    <!-- Abas de Navegação -->
                     <div class="flex border-b border-gray-700">
                         <button id="tab-form" class="tab-button active flex-1 py-4 px-6 text-lg font-bold text-center">Formulário de Inscrição</button>
                         <button id="tab-terms" class="tab-button flex-1 py-4 px-6 text-lg font-bold text-center text-gray-400">Termos e Condições</button>
                     </div>
 
-                    <!-- Conteúdo das Abas -->
                     <div class="p-8 md:p-12">
-                        <!-- Painel do Formulário -->
                         <div id="panel-form" class="tab-panel">
-                            <form id="recruitment-form" action="https://formspree.io/f/xovljggv" method="POST" target="hidden-iframe">
+                            <form id="recruitment-form">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                     <div>
                                         <label for="nome" class="block text-gray-300 mb-2 font-bold">Nome in-game</label>
@@ -324,7 +314,6 @@
                             </form>
                         </div>
 
-                        <!-- Painel de Revisão -->
                         <div id="panel-review" class="hidden">
                             <div class="text-center">
                                 <div id="review-avatar-container" class="mb-6 bg-red-900/10 p-6 rounded-lg">
@@ -347,7 +336,6 @@
                             </div>
                         </div>
 
-                        <!-- Painel dos Termos -->
                         <div id="panel-terms" class="tab-panel hidden opacity-0">
                             <div class="prose prose-invert max-w-none text-gray-300 space-y-4">
                                 <h2 class="text-2xl font-bold text-white">Jornal R1 – Termo de Responsabilidade e Conduta</h2>
@@ -388,7 +376,6 @@
         </section>
     </main>
 
-    <!-- Tela de Sucesso de Envio -->
     <div id="submission-success" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[10002] flex items-center justify-center">
         <div class="text-center">
             <svg class="w-24 h-24 mx-auto" viewBox="0 0 52 52">
@@ -400,10 +387,6 @@
         </div>
     </div>
 
-    <!-- Iframe Oculto para Envio -->
-    <iframe name="hidden-iframe" id="hidden-iframe" style="display:none;"></iframe>
-
-    <!-- Footer -->
     <footer class="border-t border-gray-900/50 relative z-10">
         <div class="container mx-auto px-6 py-8 text-center text-gray-600">
             <p>&copy; 2024 - Gestão do Jornal R1. Todos os direitos reservados.</p>
@@ -414,19 +397,16 @@
     // --- SCRIPT GERAL ---
     window.addEventListener('load', () => {
 
-        // --- PRELOADER DE PARTÍCULAS ---
+        // --- PRELOADER ---
         const preloader = document.getElementById('preloader');
         const canvas = document.getElementById('preloader-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        let mouse = { x: null, y: null, radius: 100 };
-
         function setupCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
         setupCanvas();
-
         class Particle {
             constructor(x, y) {
                 this.x = Math.random() * canvas.width;
@@ -445,33 +425,16 @@
                 ctx.fill();
             }
             update() {
-                let dx = mouse.x - this.x;
-                let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < 1) distance = 1;
-                let forceDirectionX = dx / distance;
-                let forceDirectionY = dy / distance;
-                let maxDistance = mouse.radius;
-                let force = (maxDistance - distance) / maxDistance;
-                let directionX = (forceDirectionX * force * this.density);
-                let directionY = (forceDirectionY * force * this.density);
-
-                if (distance < mouse.radius) {
-                    this.x -= directionX;
-                    this.y -= directionY;
-                } else {
-                    if (this.x !== this.baseX) {
-                        let dx = this.x - this.baseX;
-                        this.x -= dx / 10;
-                    }
-                    if (this.y !== this.baseY) {
-                        let dy = this.y - this.baseY;
-                        this.y -= dy / 10;
-                    }
+                if (this.x !== this.baseX) {
+                    let dx = this.x - this.baseX;
+                    this.x -= dx / 10;
+                }
+                if (this.y !== this.baseY) {
+                    let dy = this.y - this.baseY;
+                    this.y -= dy / 10;
                 }
             }
         }
-
         function initParticles() {
             particles = [];
             if (canvas.width <= 0 || canvas.height <= 0) return;
@@ -482,16 +445,14 @@
             ctx.fillText('R1', canvas.width / 2, canvas.height / 2);
             const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            for (let y = 0, y2 = textCoordinates.height; y < y2; y++) {
-                for (let x = 0, x2 = textCoordinates.width; x < x2; x++) {
+            for (let y = 0; y < textCoordinates.height; y += 4) {
+                for (let x = 0; x < textCoordinates.width; x += 4) {
                     if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x * 4) + 3] > 128) {
                         particles.push(new Particle(x, y));
                     }
                 }
             }
         }
-
         function animatePreloader() {
             if (particles.length === 0 && canvas.width > 0) initParticles();
             if (!preloader.classList.contains('loaded')) {
@@ -503,7 +464,6 @@
                 requestAnimationFrame(animatePreloader);
             }
         }
-
         animatePreloader();
         setTimeout(() => preloader.classList.add('loaded'), 2500);
 
@@ -511,36 +471,24 @@
         const bgCanvas = document.getElementById('background-canvas');
         const bgCtx = bgCanvas.getContext('2d');
         let time = 0;
-        
         function setupBgCanvas() {
             bgCanvas.width = window.innerWidth;
             bgCanvas.height = window.innerHeight;
         }
         setupBgCanvas();
-
         function animateBg() {
-            let grad1 = bgCtx.createLinearGradient(0, 0, bgCanvas.width, bgCanvas.height);
-            grad1.addColorStop(0, '#1a0000');
-            grad1.addColorStop(1, '#0A0A0A');
-
-            let grad2 = bgCtx.createLinearGradient(0, bgCanvas.height, bgCanvas.width, 0);
-            grad2.addColorStop(0, '#3d0f0f');
-            grad2.addColorStop(1, '#0A0A0A');
-            
             bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
             bgCtx.globalCompositeOperation = 'source-over';
+            bgCtx.fillStyle = '#0A0A0A';
+            bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+            bgCtx.globalCompositeOperation = 'lighter';
+            let x1 = bgCanvas.width / 2 + Math.sin(time * 0.001) * bgCanvas.width * 0.4;
+            let y1 = bgCanvas.height / 2 + Math.cos(time * 0.0012) * bgCanvas.height * 0.4;
+            let grad1 = bgCtx.createRadialGradient(x1, y1, 0, x1, y1, bgCanvas.width * 0.6);
+            grad1.addColorStop(0, 'rgba(155, 44, 44, 0.15)');
+            grad1.addColorStop(1, 'rgba(155, 44, 44, 0)');
             bgCtx.fillStyle = grad1;
             bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-
-            bgCtx.globalCompositeOperation = 'lighter';
-            let x = bgCanvas.width / 2 + Math.sin(time * 0.001) * bgCanvas.width * 0.3;
-            let y = bgCanvas.height / 2 + Math.cos(time * 0.0012) * bgCanvas.height * 0.3;
-            let grad3 = bgCtx.createRadialGradient(x, y, 0, x, y, bgCanvas.width * 0.5);
-            grad3.addColorStop(0, 'rgba(155, 44, 44, 0.2)');
-            grad3.addColorStop(1, 'rgba(155, 44, 44, 0)');
-            bgCtx.fillStyle = grad3;
-            bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-
             time++;
             requestAnimationFrame(animateBg);
         }
@@ -555,20 +503,16 @@
                     if (title.classList.contains('is-animated')) return;
                     title.classList.add('is-animated');
                     const text = title.textContent;
-                    const chars = text.split('').map(char => `<span>${char === ' ' ? '&nbsp;' : char}</span>`).join('');
-                    title.innerHTML = chars;
-                    const spans = title.querySelectorAll('span');
-                    spans.forEach((span, index) => {
+                    title.innerHTML = text.split('').map(char => `<span>${char === ' ' ? '&nbsp;' : char}</span>`).join('');
+                    title.querySelectorAll('span').forEach((span, index) => {
                         const isSecondLine = title.parentElement.children.length > 1 && title === title.parentElement.children[1];
-                        const delay = isSecondLine ? 0.4 : 0;
-                        span.style.animationDelay = `${delay + (index * 0.035)}s`;
+                        span.style.animationDelay = `${(isSecondLine ? 0.4 : 0) + (index * 0.035)}s`;
                     });
                     titleObserver.unobserve(title);
                 }
             });
         }, { threshold: 0.5 });
         animatedTitles.forEach(title => titleObserver.observe(title));
-
 
         // --- SCROLL REVEAL ---
         const scrollElements = document.querySelectorAll('.reveal');
@@ -591,34 +535,27 @@
         const viewTermsLink = document.getElementById('view-terms-link');
         const termItems = document.querySelectorAll('.term-item');
 
-        function switchTab(activeTab, inactiveTab, activePanel, inactivePanel) {
+        function switchTab(activeTab, inactiveTab, activePanel) {
             activeTab.classList.add('active');
             activeTab.classList.remove('text-gray-400');
             inactiveTab.classList.remove('active');
             inactiveTab.classList.add('text-gray-400');
-            
-            // Hide all panels first
-            panelForm.classList.add('hidden');
-            panelReview.classList.add('hidden');
-            panelTerms.classList.add('hidden');
-
+            [panelForm, panelReview, panelTerms].forEach(p => p.classList.add('hidden', 'opacity-0'));
             activePanel.classList.remove('hidden');
             setTimeout(() => activePanel.classList.remove('opacity-0'), 50);
-
             if (activePanel === panelTerms) {
                 termItems.forEach((item, index) => {
                     setTimeout(() => item.classList.add('visible'), index * 100);
                 });
             } else {
-                 termItems.forEach(item => item.classList.remove('visible'));
+                termItems.forEach(item => item.classList.remove('visible'));
             }
         }
-
-        tabForm.addEventListener('click', () => switchTab(tabForm, tabTerms, panelForm, panelTerms));
-        tabTerms.addEventListener('click', () => switchTab(tabTerms, tabForm, panelTerms, panelForm));
+        tabForm.addEventListener('click', () => switchTab(tabForm, tabTerms, panelForm));
+        tabTerms.addEventListener('click', () => switchTab(tabTerms, tabForm, panelTerms));
         viewTermsLink.addEventListener('click', (e) => {
             e.preventDefault();
-            switchTab(tabTerms, tabForm, panelTerms, panelForm);
+            switchTab(tabTerms, tabForm, panelTerms);
         });
         
         // --- PARALLAX DO HERO ---
@@ -630,24 +567,20 @@
             heroContent.style.transform = `translate(${-x}px, ${-y}px)`;
         });
 
-        // --- FORMULÁRIO E REVISÃO ---
+        // --- LÓGICA DO FORMULÁRIO E REVISÃO ---
         const form = document.getElementById('recruitment-form');
         const successOverlay = document.getElementById('submission-success');
         const reviewButton = document.getElementById('review-button');
         const editButton = document.getElementById('edit-button');
         const submitButton = document.getElementById('submit-button');
-        const hiddenIframe = document.getElementById('hidden-iframe');
-        let formSubmitted = false;
-
+        
         reviewButton.addEventListener('click', async () => {
             if (!form.checkValidity()) {
                 form.reportValidity();
                 return;
             }
-            
             reviewButton.textContent = 'Buscando...';
             reviewButton.disabled = true;
-
             const username = document.getElementById('nome').value;
             let profileData = null;
             try {
@@ -661,8 +594,6 @@
             } catch (error) {
                 console.error("Habbo API Error:", error);
             }
-
-            // Populate review panel
             document.getElementById('review-name').textContent = document.getElementById('nome').value;
             document.getElementById('review-discord').textContent = document.getElementById('discord').value;
             document.getElementById('review-gmail').textContent = document.getElementById('gmail').value;
@@ -673,23 +604,14 @@
             document.getElementById('review-area').textContent = areaSelect.options[areaSelect.selectedIndex].text;
             document.getElementById('review-motivo').textContent = document.getElementById('motivo').value;
             document.getElementById('review-experiencia').textContent = document.getElementById('experiencia').value;
-            
-            if (profileData) {
-                document.getElementById('review-avatar-image').src = `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${username}&action=std&direction=3&head_direction=3&gesture=sml&size=l`;
-                document.getElementById('review-motto').textContent = `"${profileData.user.motto}"`;
-            } else {
-                 document.getElementById('review-avatar-image').src = `https://www.habbo.com.br/habbo-imaging/avatarimage?user=placeholder&action=std&direction=3&head_direction=3&gesture=sml&size=l`;
-                 document.getElementById('review-motto').textContent = '(Não foi possível buscar a missão)';
-            }
-
-            // Animate transition
+            document.getElementById('review-avatar-image').src = `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${username}&action=std&direction=3&head_direction=3&gesture=sml&size=l`;
+            document.getElementById('review-motto').textContent = profileData ? `"${profileData.user.motto}"` : '(Não foi possível buscar a missão)';
             panelForm.classList.add('form-transition-out');
             setTimeout(() => {
                 panelForm.classList.add('hidden');
                 panelReview.classList.remove('hidden');
                 setTimeout(() => panelReview.classList.add('form-transition-in'), 50);
             }, 500);
-            
             reviewButton.textContent = 'Revisar Informações';
             reviewButton.disabled = false;
         });
@@ -704,35 +626,91 @@
             }, 500);
         });
         
-        hiddenIframe.addEventListener('load', () => {
-            if (formSubmitted) {
-                successOverlay.classList.remove('hidden');
-                setTimeout(() => successOverlay.classList.add('visible'), 10);
+        submitButton.addEventListener('click', async () => {
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Enviando...`;
+            
+            const webhookUrl = "https://discord.com/api/webhooks/1415105644520018085/7fCkflXJjWMx3tSOZcdAhmjXjcd0i-9PlU0nbcoOiq_0Ft8P40d5bRB8btMvfDEpgxbO";
+            const formData = new FormData(form);
+            const data = {
+                nome: formData.get('Nome in-game'),
+                discord: formData.get('Discord'),
+                gmail: formData.get('Gmail'),
+                whatsapp: formData.get('WhatsApp').trim(),
+                area: formData.get('Área de Interesse'),
+                motivo: formData.get('Motivo'),
+                experiencia: formData.get('Experiência Anterior'),
+                avatarUrl: document.getElementById('review-avatar-image').src
+            };
 
-                setTimeout(() => {
-                    successOverlay.classList.remove('visible');
-                    setTimeout(() => {
-                        successOverlay.classList.add('hidden');
-                        form.reset();
-                        editButton.click(); // Volta para a tela de formulário
-                        formSubmitted = false;
-                    }, 500);
-                }, 3000);
+            const embedFields = [
+                { name: "💼 Área de Interesse", value: `**${data.area}**`, inline: true },
+                { name: "👤 Discord", value: data.discord, inline: true },
+                { name: "📧 Gmail", value: `||${data.gmail}||`, inline: false },
+            ];
+            
+            if (data.whatsapp) {
+                embedFields.push({ name: "📱 WhatsApp", value: `||${data.whatsapp}||`, inline: false });
             }
-        });
+            embedFields.push(
+                { name: "💡 Motivo para Entrar", value: data.motivo, inline: false },
+                { name: "📚 Experiência Anterior", value: data.experiencia, inline: false }
+            );
+            
+            const payload = {
+                username: "Jornal R1 - Recrutamento",
+                avatar_url: "https://i.imgur.com/ormXJbf.png",
+                embeds: [{
+                    author: {
+                        name: data.nome,
+                        url: `https://www.habbo.com.br/profile/${data.nome}`,
+                        icon_url: "https://i.imgur.com/ormXJbf.png"
+                    },
+                    title: "Nova Inscrição Recebida!",
+                    color: 15021886,
+                    thumbnail: { url: data.avatarUrl },
+                    fields: embedFields,
+                    timestamp: new Date().toISOString(),
+                    footer: { text: "Formulário de Recrutamento R1" }
+                }]
+            };
 
-        submitButton.addEventListener('click', () => {
-            formSubmitted = true;
-            form.submit();
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (response.ok) {
+                    successOverlay.classList.remove('hidden');
+                    setTimeout(() => successOverlay.classList.add('visible'), 10);
+                    setTimeout(() => {
+                        successOverlay.classList.remove('visible');
+                        setTimeout(() => {
+                            successOverlay.classList.add('hidden');
+                            form.reset();
+                            document.getElementById('terms-checkbox').checked = false;
+                            editButton.click();
+                        }, 500);
+                    }, 3000);
+                } else {
+                    alert('Houve um problema ao enviar sua inscrição. Por favor, tente novamente.');
+                }
+            } catch (error) {
+                console.error('Fetch Error:', error);
+                alert('Ocorreu um erro de conexão. Verifique sua internet e tente novamente.');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+            }
         });
 
         // --- SCROLL SUAVE ---
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
             });
         });
 
