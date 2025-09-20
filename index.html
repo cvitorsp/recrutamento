@@ -660,9 +660,9 @@
 
             try {
                 // MUDANÇA 3: O 'body' agora envia 'data'
-                const response = await fetch(webhookUrl, {
+const response = await fetch(webhookUrl, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain' }, // <-- LINHA MODIFICADA
                     body: JSON.stringify(data) 
                 });
                 
