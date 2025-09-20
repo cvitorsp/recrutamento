@@ -1,19 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' b:templateVersion='1.3.0' expr:dir='data:blog.languageDirection' expr:lang='data:blog.locale' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html lang="pt-BR">
 <head>
-    <meta charset='UTF-8'/>
-    <meta content='width=device-width, initial-scale=1.0' name='viewport'/>
-    <title><data:blog.pageTitle/></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jornal R1 - Seja um Jornalista</title>
     
-    <link href='https://fonts.googleapis.com' rel='preconnect'/>
-    <link crossorigin='' href='https://fonts.gstatic.com' rel='preconnect'/>
-    <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&amp;display=swap' rel='stylesheet'/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
-    <script src='https://cdn.tailwindcss.com'></script>
-    
-    <b:skin><![CDATA[
-        /* --- Estilos Globais e Tema Escuro Premium (do seu HTML) --- */
+    <style>
+        /* Estilos Globais e Tema Escuro Premium */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0A0A0A;
@@ -35,6 +34,30 @@
         }
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(180deg, #ff4d4d, #e53e3e);
+        }
+
+        /* --- Tela de Carregamento com Partículas --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0A0A0A;
+            z-index: 10001;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.5s ease-in-out;
+        }
+        #preloader.loaded {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #preloader-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         /* --- Animação de Texto Letra por Letra --- */
@@ -191,557 +214,497 @@
         /* Cores de Destaque */
         .highlight-red { color: #E53E3E; }
         .bg-highlight-red { background-color: #E53E3E; }
-        
-        /* --- ESTILOS ADICIONAIS PARA BLOGSPOT --- */
-        /* Estiliza o corpo da postagem */
-        .post-body {
-            line-height: 1.7;
-            font-size: 1.1rem;
-            color: #EAEAEA;
-        }
-        .post-body img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-        }
-        .post-body h1, .post-body h2, .post-body h3 {
-            color: #E53E3E;
-            font-weight: 700;
-            margin-top: 1.5em;
-            margin-bottom: 0.5em;
-        }
-        .post-body a {
-            color: #E53E3E;
-            text-decoration: underline;
-        }
-        .post-body a:hover {
-            color: #ff4d4d;
-        }
-        
-        /* Estiliza o título das postagens */
-        .post-title-link {
-            color: #ffffff;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .post-title-link:hover {
-            color: #E53E3E;
-        }
-        
-        /* Oculta elementos padrão do Blogger que não queremos */
-        .blog-pager, .post-footer, .jump-link {
-            display: none;
-        }
-        
-        /* Estilo para "Leia Mais" */
-        .read-more-link {
-            display: inline-block;
-            margin-top: 1.5rem;
-            color: #E53E3E;
-            font-weight: 700;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .read-more-link:hover {
-            color: #ff4d4d;
-        }
-
-    ]]></b:skin>
+    </style>
 </head>
-<body class='antialiased'>
+<body class="antialiased">
 
-    <canvas id='background-canvas'></canvas>
+    <div id="preloader">
+        <canvas id="preloader-canvas"></canvas>
+    </div>
 
-    <header class='fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-sm'>
-        <div class='container mx-auto px-6 py-4 flex justify-between items-center'>
-            <div class='flex items-center'>
-                <img alt='Logo Jornal R1' class='h-10 w-10 mr-3' src='https://i.imgur.com/ormXJbf.png'/>
-                <a class='text-xl font-bold text-white' expr:href='data:blog.homepageUrl' style='text-decoration:none;'>Jornal R1</a>
+    <canvas id="background-canvas"></canvas>
+
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-sm">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="https://i.imgur.com/ormXJbf.png" alt="Logo Jornal R1" class="h-10 w-10 mr-3">
+                <span class="text-xl font-bold text-white">Jornal R1</span>
             </div>
             <nav>
-                <b:section class='header-nav' id='header-nav' maxwidgets='1' showaddelement='yes'>
-                    <b:widget id='LinkList1' locked='false' title='Menu Principal' type='LinkList' version='2'>
-                        <b:includable id='main'>
-                            <ul>
-                                <b:loop values='data:links' var='link'>
-                                    <li>
-                                        <a class='bg-highlight-red text-white px-5 py-2 rounded-full text-sm font-bold hover:opacity-90 transition-opacity transform hover:scale-105 shine-button' expr:href='data:link.target'><data:link.name/></a>
-                                    </li>
-                                </b:loop>
-                            </ul>
-                        </b:includable>
-                    </b:widget>
-                </b:section>
-                </nav>
+                <a href="#inscricao" class="bg-highlight-red text-white px-5 py-2 rounded-full text-sm font-bold hover:opacity-90 transition-opacity transform hover:scale-105 shine-button">Inscreva-se</a>
+            </nav>
         </div>
     </header>
 
     <main>
-        <b:if cond='data:view.isHomepage'>
-            <section class='min-h-screen flex items-center justify-center text-center overflow-hidden'>
-                <div id='hero-content' class='container mx-auto px-6 relative z-10 transition-transform duration-300 ease-out'>
-                    <div class='reveal floating'>
-                        <h1 class='text-5xl md:text-7xl font-black text-white leading-tight mb-4'>
-                            <span class='block animated-title'>Jornalismo</span>
-                            <span class='block highlight-red animated-title'>Habbo Hotel</span>
-                        </h1>
-                        <p class='text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-8'>
-                            Buscamos mentes criativas e apaixonadas por jornalismo para contar as histórias que movem o Habbo Hotel.
-                        </p>
-                        <a href='#posts' class='bg-highlight-red text-white px-8 py-4 rounded-full text-lg font-bold hover:opacity-90 transition-transform transform hover:scale-105 inline-block shine-button'>
-                            Ver Notícias
-                        </a>
-                    </div>
+        <section class="min-h-screen flex items-center justify-center text-center overflow-hidden">
+            <div id="hero-content" class="container mx-auto px-6 relative z-10 transition-transform duration-300 ease-out">
+                <div class="reveal floating">
+                    <h1 class="text-5xl md:text-7xl font-black text-white leading-tight mb-4">
+                        <span class="block animated-title">Faça Parte da</span>
+                        <span class="block highlight-red animated-title">Nossa Equipe</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-8">
+                        Buscamos mentes criativas e apaixonadas por jornalismo para contar as histórias que movem o Habbo Hotel.
+                    </p>
+                    <a href="#inscricao" class="bg-highlight-red text-white px-8 py-4 rounded-full text-lg font-bold hover:opacity-90 transition-transform transform hover:scale-105 inline-block shine-button">
+                        Iniciar Inscrição
+                    </a>
                 </div>
-            </section>
-        </b:if>
+            </div>
+        </section>
 
-        <section id='posts' class='py-24 relative z-10'>
-            <div class='container mx-auto px-6'>
-                <div class='max-w-4xl mx-auto'>
-                    <b:section class='main' id='main-blog' maxwidgets='1' showaddelement='no'>
-                        <b:widget id='Blog1' locked='true' title='Postagens do blog' type='Blog' version='2'>
-                            <b:includable id='main'>
-                                <b:loop values='data:posts' var='post'>
-                                    <div class='main-card rounded-2xl reveal overflow-hidden mb-10'>
-                                        <div class='p-8 md:p-12'>
-                                            <h2 class='text-3xl md:text-4xl font-bold mb-3'>
-                                                <a class='post-title-link' expr:href='data:post.url'><data:post.title/></a>
-                                            </h2>
-                                            <div class='text-gray-400 mb-6 text-sm uppercase'>
-                                                <span>Por <data:post.author/></span> / <span><data:post.timestamp/></span>
-                                            </div>
-                                            <div class='post-body'>
-                                                <b:eval expr='data:post.snippets.long snippet { length: 350, links: false, linebreaks: false, ellipsis: true }' />
-                                            </div>
-                                            <a class='read-more-link' expr:href='data:post.url'>Leia Mais &#8594;</a>
-                                        </div>
+        <section id="inscricao" class="py-24 relative z-10">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto main-card rounded-2xl reveal overflow-hidden">
+                    <div class="flex border-b border-gray-700">
+                        <button id="tab-form" class="tab-button active flex-1 py-4 px-6 text-lg font-bold text-center">Formulário de Inscrição</button>
+                        <button id="tab-terms" class="tab-button flex-1 py-4 px-6 text-lg font-bold text-center text-gray-400">Termos e Condições</button>
+                    </div>
+
+                    <div class="p-8 md:p-12">
+                        <div id="panel-form" class="tab-panel">
+                            <form id="recruitment-form">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                    <div>
+                                        <label for="nome" class="block text-gray-300 mb-2 font-bold">Nome in-game</label>
+                                        <input type="text" id="nome" name="Nome in-game" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all" required>
                                     </div>
-                                </b:loop>
-                            </b:includable>
-                            
-                            <b:includable id='post'>
-                                <div class='main-card rounded-2xl reveal is-visible overflow-hidden mb-10'>
-                                    <div class='p-8 md:p-12'>
-                                        <h1 class='text-3xl md:text-5xl font-bold mb-3 text-white'>
-                                            <data:post.title/>
-                                        </h1>
-                                        <div class='text-gray-400 mb-8 text-sm uppercase'>
-                                            <span>Por <data:post.author/></span> / <span><data:post.timestamp/></span>
-                                        </div>
-                                        <div class='post-body'>
-                                            <data:post.body/>
-                                        </div>
+                                    <div>
+                                        <label for="discord" class="block text-gray-300 mb-2 font-bold">Discord</label>
+                                        <input type="text" id="discord" name="Discord" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all" required>
+                                    </div>
+                                    <div>
+                                        <label for="gmail" class="block text-gray-300 mb-2 font-bold">Gmail</label>
+                                        <input type="email" id="gmail" name="Gmail" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all" required>
+                                    </div>
+                                    <div>
+                                        <label for="whatsapp" class="block text-gray-300 mb-2 font-bold">WhatsApp (opcional)</label>
+                                        <input type="tel" id="whatsapp" name="WhatsApp" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all">
                                     </div>
                                 </div>
-                                <b:include data='post' name='comments'/>
-                            </b:includable>
-
-                            <b:includable id='page'>
-                                <div class='main-card rounded-2xl reveal is-visible overflow-hidden'>
-                                    <b:if cond='data:blog.pageName == "inscreva-se"'>
-                                        <div class='flex border-b border-gray-700'>
-                                            <button id='tab-form' class='tab-button active flex-1 py-4 px-6 text-lg font-bold text-center'>Formulário de Inscrição</button>
-                                            <button id='tab-terms' class='tab-button flex-1 py-4 px-6 text-lg font-bold text-center text-gray-400'>Termos e Condições</button>
-                                        </div>
-                                        <div class='p-8 md:p-12'>
-                                            <div id='panel-form' class='tab-panel'>
-                                                <form id='recruitment-form'>
-                                                    <div class='grid grid-cols-1 md:grid-cols-2 gap-6 mb-6'>
-                                                        <div>
-                                                            <label for='nome' class='block text-gray-300 mb-2 font-bold'>Nome in-game</label>
-                                                            <input type='text' id='nome' name='Nome in-game' class='w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all' required='required'/>
-                                                        </div>
-                                                        <div>
-                                                            <label for='discord' class='block text-gray-300 mb-2 font-bold'>Discord</label>
-                                                            <input type='text' id='discord' name='Discord' class='w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all' required='required'/>
-                                                        </div>
-                                                        <div>
-                                                            <label for='gmail' class='block text-gray-300 mb-2 font-bold'>Gmail</label>
-                                                            <input type='email' id='gmail' name='Gmail' class='w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all' required='required'/>
-                                                        </div>
-                                                        <div>
-                                                            <label for='whatsapp' class='block text-gray-300 mb-2 font-bold'>WhatsApp (opcional)</label>
-                                                            <input type='tel' id='whatsapp' name='WhatsApp' class='w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all'/>
-                                                        </div>
-                                                    </div>
-                                                    <div class='mb-6'>
-                                                        <label for='area' class='block text-gray-300 mb-2 font-bold'>Qual área você deseja atuar?</label>
-                                                        <select id='area' name='Área de Interesse' class='w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all' required='required'>
-                                                            <option value='' disabled='disabled' selected='selected'>Selecione uma opção</option>
-                                                            <option value='Jornalismo'>Jornalismo</option>
-                                                            <option value='Designer'>Designer</option>
-                                                            <option value='Programação'>Programação</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class='mb-6'>
-                                                        <label for='motivo' class='block text-gray-300 mb-2 font-bold'>Por que deseja entrar no Jornal R1?</label>
-                                                        <textarea id='motivo' name='Motivo' rows='4' class='w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all' required='required'></textarea>
-                                                    </div>
-                                                    <div class='mb-8'>
-                                                        <label for='experiencia' class='block text-gray-300 mb-2 font-bold'>Já participou de algum jornal? Se sim, qual?</label>
-                                                        <textarea id='experiencia' name='Experiência Anterior' rows='3' class='w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all' required='required'></textarea>
-                                                    </div>
-                                                    <div class='mb-8'>
-                                                        <label class='flex items-center cursor-pointer'>
-                                                            <input type='checkbox' id='terms-checkbox' name='Termos' value='Aceito' class='h-5 w-5 bg-gray-900/50 border-gray-700 text-red-500 focus:ring-red-500/50 rounded' required='required'/>
-                                                            <span class='ml-3 text-gray-300'>Declaro que li e estou ciente dos <a href='#' id='view-terms-link' class='highlight-red underline hover:text-red-400'>termos e condições</a>.</span>
-                                                        </label>
-                                                    </div>
-                                                    <div class='text-center'>
-                                                        <button type='button' id='review-button' class='w-full md:w-auto bg-gray-600 text-white font-bold py-4 px-12 rounded-full hover:bg-gray-500 transition-all transform hover:scale-105 shine-button'>
-                                                            Revisar Informações
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <div id='panel-review' class='hidden'>
-                                                <div class='text-center'>
-                                                    <div id='review-avatar-container' class='mb-6 bg-red-900/10 p-6 rounded-lg'>
-                                                        <img id='review-avatar-image' src='' class='w-32 h-auto mx-auto' style='margin-top: -30px; image-rendering: pixelated;'/>
-                                                        <h3 id='review-name' class='text-3xl font-bold mt-2'></h3>
-                                                        <p id='review-motto' class='text-gray-400 italic'></p>
-                                                    </div>
-                                                    <div class='text-left space-y-4 bg-black/20 p-6 rounded-lg'>
-                                                        <div><strong class='text-red-500'>Discord:</strong> <span id='review-discord'></span></div>
-                                                        <div><strong class='text-red-500'>Gmail:</strong> <span id='review-gmail'></span></div>
-                                                        <div id='review-whatsapp-wrapper'><strong class='text-red-500'>WhatsApp:</strong> <span id='review-whatsapp'></span></div>
-                                                        <div><strong class='text-red-500'>Área de Interesse:</strong> <span id='review-area'></span></div>
-                                                        <div><strong class='text-red-500'>Motivo:</strong> <p id='review-motivo' class='text-gray-300 whitespace-pre-wrap'></p></div>
-                                                        <div><strong class='text-red-500'>Experiência:</strong> <p id='review-experiencia' class='text-gray-300 whitespace-pre-wrap'></p></div>
-                                                    </div>
-                                                    <div class='mt-8 flex flex-col md:flex-row justify-center gap-4'>
-                                                        <button type='button' id='edit-button' class='w-full md:w-auto bg-gray-600 text-white font-bold py-3 px-8 rounded-full hover:bg-gray-500 transition-colors'>Editar</button>
-                                                        <button type='button' id='submit-button' class='w-full md:w-auto bg-highlight-red text-white font-bold py-3 px-8 rounded-full hover:opacity-90 transition-opacity shine-button'>Confirmar Inscrição</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div id='panel-terms' class='tab-panel hidden opacity-0'>
-                                                <div class='prose prose-invert max-w-none text-gray-300 space-y-4'>
-                                                    <h2 class='text-2xl font-bold text-white'>Jornal R1 – Termo de Responsabilidade e Conduta</h2>
-                                                    <div class='term-item'>
-                                                        <h3 class='font-bold text-red-500'>1. Natureza Voluntária</h3>
-                                                        <p>Ao ingressar no Jornal R1, o membro declara estar ciente de que sua participação é voluntária e sem fins lucrativos...</p>
-                                                    </div>
-                                                    <div class='term-item'>
-                                                        <h3 class='font-bold text-red-500'>2. Conduta e Respeito Hierárquico</h3>
-                                                        <p>Cada cargo possui funções específicas...</p>
-                                                    </div>
-                                                    <div class='term-item'>
-                                                        <h3 class='font-bold text-red-500'>3. Uso Indevido de Cargo</h3>
-                                                        <p>É terminantemente proibido utilizar o cargo...</p>
-                                                    </div>
-                                                    <div class='term-item'>
-                                                        <h3 class='font-bold text-red-500'>4. Proteção de Informações</h3>
-                                                        <p>É proibido divulgar informações internas...</p>
-                                                    </div>
-                                                    <div class='term-item'>
-                                                        <h3 class='font-bold text-red-500'>5. Ausências e Compromissos</h3>
-                                                        <p>Todos os membros devem registrar suas ausências...</p>
-                                                    </div>
-                                                    <div class='term-item'>
-                                                        <h3 class='font-bold text-red-500'>6. Políticas de Redes Sociais e Legislação Brasileira</h3>
-                                                        <p>O Jornal R1 se compromete a seguir as políticas...</p>
-                                                    </div>
-                                                    <div class='term-item'>
-                                                        <h3 class='font-bold text-red-500'>7. Declaração de Ciência</h3>
-                                                        <p>Ao ingressar no Jornal R1, o membro declara que leu...</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <b:else/>
-                                        <div class='p-8 md:p-12'>
-                                            <h1 class='text-3xl md:text-5xl font-bold mb-8 text-white'>
-                                                <data:post.title/>
-                                            </h1>
-                                            <div class='post-body'>
-                                                <data:post.body/>
-                                            </div>
-                                        </div>
-                                    </b:if>
+                                <div class="mb-6">
+                                    <label for="area" class="block text-gray-300 mb-2 font-bold">Qual área você deseja atuar?</label>
+                                    <select id="area" name="Área de Interesse" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all" required>
+                                        <option value="" disabled selected>Selecione uma opção</option>
+                                        <option value="Jornalismo">Jornalismo</option>
+                                        <option value="Designer">Designer</option>
+                                        <option value="Programação">Programação</option>
+                                    </select>
                                 </div>
-                            </b:includable>
-                        </b:widget>
-                    </b:section>
+                                <div class="mb-6">
+                                    <label for="motivo" class="block text-gray-300 mb-2 font-bold">Por que deseja entrar no Jornal R1?</label>
+                                    <textarea id="motivo" name="Motivo" rows="4" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all" required></textarea>
+                                </div>
+                                <div class="mb-8">
+                                    <label for="experiencia" class="block text-gray-300 mb-2 font-bold">Já participou de algum jornal? Se sim, qual?</label>
+                                    <textarea id="experiencia" name="Experiência Anterior" rows="3" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-red-500/50 transition-all" required></textarea>
+                                </div>
+                                <div class="mb-8">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox" id="terms-checkbox" name="Termos" value="Aceito" class="h-5 w-5 bg-gray-900/50 border-gray-700 text-red-500 focus:ring-red-500/50 rounded" required>
+                                        <span class="ml-3 text-gray-300">Declaro que li e estou ciente dos <a href="#" id="view-terms-link" class="highlight-red underline hover:text-red-400">termos e condições</a>.</span>
+                                    </label>
+                                </div>
+                                <div class="text-center">
+                                    <button type="button" id="review-button" class="w-full md:w-auto bg-gray-600 text-white font-bold py-4 px-12 rounded-full hover:bg-gray-500 transition-all transform hover:scale-105 shine-button">
+                                        Revisar Informações
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id="panel-review" class="hidden"> 
+                            <div class="text-center">
+                                <div id="review-avatar-container" class="mb-6 bg-red-900/10 p-6 rounded-lg">
+                                    <img id="review-avatar-image" src="" class="w-32 h-auto mx-auto" style="margin-top: -30px; image-rendering: pixelated;">
+                                    <h3 id="review-name" class="text-3xl font-bold mt-2"></h3>
+                                    <p id="review-motto" class="text-gray-400 italic"></p>
+                                </div>
+                                <div class="text-left space-y-4 bg-black/20 p-6 rounded-lg">
+                                    <div><strong class="text-red-500">Discord:</strong> <span id="review-discord"></span></div>
+                                    <div><strong class="text-red-500">Gmail:</strong> <span id="review-gmail"></span></div>
+                                    <div id="review-whatsapp-wrapper"><strong class="text-red-500">WhatsApp:</strong> <span id="review-whatsapp"></span></div>
+                                    <div><strong class="text-red-500">Área de Interesse:</strong> <span id="review-area"></span></div>
+                                    <div><strong class="text-red-500">Motivo:</strong> <p id="review-motivo" class="text-gray-300 whitespace-pre-wrap"></p></div>
+                                    <div><strong class="text-red-500">Experiência:</strong> <p id="review-experiencia" class="text-gray-300 whitespace-pre-wrap"></p></div>
+                                </div>
+                                <div class="mt-8 flex flex-col md:flex-row justify-center gap-4">
+                                    <button type="button" id="edit-button" class="w-full md:w-auto bg-gray-600 text-white font-bold py-3 px-8 rounded-full hover:bg-gray-500 transition-colors">Editar</button>
+                                    <button type="button" id="submit-button" class="w-full md:w-auto bg-highlight-red text-white font-bold py-3 px-8 rounded-full hover:opacity-90 transition-opacity shine-button">Confirmar Inscrição</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="panel-terms" class="tab-panel hidden opacity-0">
+                            <div class="prose prose-invert max-w-none text-gray-300 space-y-4">
+                                <h2 class="text-2xl font-bold text-white">Jornal R1 – Termo de Responsabilidade e Conduta</h2>
+                                
+                                <div class="term-item">
+                                    <h3 class="font-bold text-red-500">1. Natureza Voluntária</h3>
+                                    <p>Ao ingressar no Jornal R1, o membro declara estar ciente de que sua participação é voluntária e sem fins lucrativos, não estabelecendo qualquer tipo de vínculo empregatício, trabalhista ou contratual com a administração do jornal.</p>
+                                </div>
+                                <div class="term-item">
+                                    <h3 class="font-bold text-red-500">2. Conduta e Respeito Hierárquico</h3>
+                                    <p>Cada cargo possui funções específicas, que devem ser cumpridas com responsabilidade. O respeito deve ser mantido em todos os níveis hierárquicos, tanto de subordinados para superiores quanto de superiores para subordinados.</p>
+                                </div>
+                                <div class="term-item">
+                                    <h3 class="font-bold text-red-500">3. Uso Indevido de Cargo</h3>
+                                    <p>É terminantemente proibido utilizar o cargo de jornalista para obter vantagens pessoais, manipular informações ou beneficiar-se diante de organizações, usuários ou autoridades do jogo.</p>
+                                </div>
+                                <div class="term-item">
+                                    <h3 class="font-bold text-red-500">4. Proteção de Informações</h3>
+                                    <p>É proibido divulgar informações internas do jornal ou qualquer conteúdo sigiloso sem autorização prévia. O descumprimento desta cláusula poderá resultar em expulsão imediata e possíveis ações legais, caso haja violação de direitos.</p>
+                                </div>
+                                <div class="term-item">
+                                    <h3 class="font-bold text-red-500">5. Ausências e Compromissos</h3>
+                                    <p>Todos os membros devem registrar suas ausências na aba de AUSÊNCIA, no Discord oficial da cidade, informando: Data de início e previsão de retorno; Motivo da ausência, quando necessário.</p>
+                                </div>
+                                <div class="term-item">
+                                    <h3 class="font-bold text-red-500">6. Políticas de Redes Sociais e Legislação Brasileira</h3>
+                                    <p>O Jornal R1 se compromete a seguir as políticas das plataformas digitais em que atua, bem como as leis brasileiras de proteção de dados, direitos autorais e privacidade. Qualquer transgressão que viole direitos dos usuários ou normas legais resultará em banimento do responsável e, caso necessário, o Jornal R1 tomará medidas legais cabíveis.</p>
+                                </div>
+                                <div class="term-item">
+                                    <h3 class="font-bold text-red-500">7. Declaração de Ciência</h3>
+                                    <p>Ao ingressar no Jornal R1, o membro declara que leu, compreendeu e concorda com este Termo de Responsabilidade e Conduta, reconhecendo que se trata de um projeto colaborativo, sem remuneração, e comprometendo-se a agir com ética, respeito e profissionalismo.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <div id='submission-success' class='hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[10002] flex items-center justify-center'>
-        <div class='text-center'>
-            <svg class='w-24 h-24 mx-auto' viewBox='0 0 52 52'>
-                <circle class='success-circle' cx='26' cy='26' r='25' fill='none'/>
-                <path class='success-checkmark' fill='none' d='M14.1 27.2l7.1 7.2 16.7-16.8'/>
+    <div id="submission-success" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[10002] flex items-center justify-center">
+        <div class="text-center">
+            <svg class="w-24 h-24 mx-auto" viewBox="0 0 52 52">
+                <circle class="success-circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="success-checkmark" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
             </svg>
-            <h3 class='text-3xl font-bold text-white mt-6'>Inscrição Enviada!</h3>
-            <p class='text-gray-300 mt-2'>Agradecemos seu interesse. Nossa equipe entrará em contato em breve.</p>
+            <h3 class="text-3xl font-bold text-white mt-6">Inscrição Enviada!</h3>
+            <p class="text-gray-300 mt-2">Agradecemos seu interesse. Nossa equipe entrará em contato em breve.</p>
         </div>
     </div>
 
-    <footer class='border-t border-gray-900/50 relative z-10'>
-        <div class='container mx-auto px-6 py-8 text-center text-gray-600'>
-            <b:section class='footer' id='footer' maxwidgets='1' showaddelement='yes'>
-                <b:widget id='Text1' locked='false' title='Copyright' type='Text' version='2'>
-                    <b:includable id='main'>
-                        <p>&amp;copy; <data:view.copyright.year/> - Gestão do Jornal R1. Todos os direitos reservados.</p>
-                    </b:includable>
-                </b:widget>
-            </b:section>
+    <footer class="border-t border-gray-900/50 relative z-10">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p>&copy; 2024 - Gestão do Jornal R1. Todos os direitos reservados.</p>
         </div>
     </footer>
 
     <script>
-    //<![CDATA[
     // --- SCRIPT GERAL ---
     window.addEventListener('load', () => {
 
+        // --- PRELOADER ---
+        const preloader = document.getElementById('preloader');
+        const canvas = document.getElementById('preloader-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function setupCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        setupCanvas();
+        class Particle {
+            constructor(x, y) {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.baseX = x;
+                this.baseY = y;
+                this.density = (Math.random() * 30) + 1;
+                this.color = '#E53E3E';
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+            update() {
+                if (this.x !== this.baseX) {
+                    let dx = this.x - this.baseX;
+                    this.x -= dx / 10;
+                }
+                if (this.y !== this.baseY) {
+                    let dy = this.y - this.baseY;
+                    this.y -= dy / 10;
+                }
+            }
+        }
+        function initParticles() {
+            particles = [];
+            if (canvas.width <= 0 || canvas.height <= 0) return;
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 120px Inter';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('R1', canvas.width / 2, canvas.height / 2);
+            const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let y = 0; y < textCoordinates.height; y += 4) {
+                for (let x = 0; x < textCoordinates.width; x += 4) {
+                    if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x * 4) + 3] > 128) {
+                        particles.push(new Particle(x, y));
+                    }
+                }
+            }
+        }
+        function animatePreloader() {
+            if (particles.length === 0 && canvas.width > 0) initParticles();
+            if (!preloader.classList.contains('loaded')) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].draw();
+                    particles[i].update();
+                }
+                requestAnimationFrame(animatePreloader);
+            }
+        }
+        animatePreloader();
+        setTimeout(() => preloader.classList.add('loaded'), 2500);
+
         // --- FUNDO "GRADIENTE VIVO" ---
         const bgCanvas = document.getElementById('background-canvas');
-        if (bgCanvas) {
-            const bgCtx = bgCanvas.getContext('2d');
-            let time = 0;
-            function setupBgCanvas() {
-                bgCanvas.width = window.innerWidth;
-                bgCanvas.height = window.innerHeight;
-            }
-            setupBgCanvas();
-            function animateBg() {
-                if (!bgCtx) return;
-                bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-                bgCtx.globalCompositeOperation = 'source-over';
-                bgCtx.fillStyle = '#0A0A0A';
-                bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-                bgCtx.globalCompositeOperation = 'lighter';
-                let x1 = bgCanvas.width / 2 + Math.sin(time * 0.001) * bgCanvas.width * 0.4;
-                let y1 = bgCanvas.height / 2 + Math.cos(time * 0.0012) * bgCanvas.height * 0.4;
-                let grad1 = bgCtx.createRadialGradient(x1, y1, 0, x1, y1, bgCanvas.width * 0.6);
-                grad1.addColorStop(0, 'rgba(155, 44, 44, 0.15)');
-                grad1.addColorStop(1, 'rgba(155, 44, 44, 0)');
-                bgCtx.fillStyle = grad1;
-                bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-                time++;
-                requestAnimationFrame(animateBg);
-            }
-            animateBg();
-            window.addEventListener('resize', setupBgCanvas);
+        const bgCtx = bgCanvas.getContext('2d');
+        let time = 0;
+        function setupBgCanvas() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
         }
+        setupBgCanvas();
+        function animateBg() {
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            bgCtx.globalCompositeOperation = 'source-over';
+            bgCtx.fillStyle = '#0A0A0A';
+            bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+            bgCtx.globalCompositeOperation = 'lighter';
+            let x1 = bgCanvas.width / 2 + Math.sin(time * 0.001) * bgCanvas.width * 0.4;
+            let y1 = bgCanvas.height / 2 + Math.cos(time * 0.0012) * bgCanvas.height * 0.4;
+            let grad1 = bgCtx.createRadialGradient(x1, y1, 0, x1, y1, bgCanvas.width * 0.6);
+            grad1.addColorStop(0, 'rgba(155, 44, 44, 0.15)');
+            grad1.addColorStop(1, 'rgba(155, 44, 44, 0)');
+            bgCtx.fillStyle = grad1;
+            bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+            time++;
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
 
         // --- ANIMAÇÃO DE TEXTO ---
         const animatedTitles = document.querySelectorAll('.animated-title');
-        if (animatedTitles.length > 0) {
-            const titleObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const title = entry.target;
-                        if (title.classList.contains('is-animated')) return;
-                        title.classList.add('is-animated');
-                        const text = title.textContent;
-                        title.innerHTML = text.split('').map(char => `<span>${char === ' ' ? '&nbsp;' : char}</span>`).join('');
-                        title.querySelectorAll('span').forEach((span, index) => {
-                            const isSecondLine = title.parentElement.children.length > 1 && title === title.parentElement.children[1];
-                            span.style.animationDelay = `${(isSecondLine ? 0.4 : 0) + (index * 0.035)}s`;
-                        });
-                        titleObserver.unobserve(title);
-                    }
-                });
-            }, { threshold: 0.5 });
-            animatedTitles.forEach(title => titleObserver.observe(title));
-        }
+        const titleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const title = entry.target;
+                    if (title.classList.contains('is-animated')) return;
+                    title.classList.add('is-animated');
+                    const text = title.textContent;
+                    title.innerHTML = text.split('').map(char => `<span>${char === ' ' ? '&nbsp;' : char}</span>`).join('');
+                    title.querySelectorAll('span').forEach((span, index) => {
+                        const isSecondLine = title.parentElement.children.length > 1 && title === title.parentElement.children[1];
+                        span.style.animationDelay = `${(isSecondLine ? 0.4 : 0) + (index * 0.035)}s`;
+                    });
+                    titleObserver.unobserve(title);
+                }
+            });
+        }, { threshold: 0.5 });
+        animatedTitles.forEach(title => titleObserver.observe(title));
 
         // --- SCROLL REVEAL ---
         const scrollElements = document.querySelectorAll('.reveal');
-        if (scrollElements.length > 0) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-            scrollElements.forEach(el => observer.observe(el));
-        }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        scrollElements.forEach(el => observer.observe(el));
 
-        // --- LÓGICA DAS ABAS (só roda se os elementos existirem) ---
+        // --- LÓGICA DAS ABAS ---
         const tabForm = document.getElementById('tab-form');
-        if (tabForm) {
-            const tabTerms = document.getElementById('tab-terms');
-            const panelForm = document.getElementById('panel-form');
-            const panelReview = document.getElementById('panel-review');
-            const panelTerms = document.getElementById('panel-terms');
-            const viewTermsLink = document.getElementById('view-terms-link');
-            const termItems = document.querySelectorAll('.term-item');
+        const tabTerms = document.getElementById('tab-terms');
+        const panelForm = document.getElementById('panel-form');
+        const panelReview = document.getElementById('panel-review');
+        const panelTerms = document.getElementById('panel-terms');
+        const viewTermsLink = document.getElementById('view-terms-link');
+        const termItems = document.querySelectorAll('.term-item');
 
-            function switchTab(activeTab, inactiveTab, activePanel) {
-                activeTab.classList.add('active');
-                activeTab.classList.remove('text-gray-400');
-                inactiveTab.classList.remove('active');
-                inactiveTab.classList.add('text-gray-400');
-                [panelForm, panelReview, panelTerms].forEach(p => { if(p) p.classList.add('hidden', 'opacity-0') });
-                if (activePanel) {
-                    activePanel.classList.remove('hidden');
-                    setTimeout(() => activePanel.classList.remove('opacity-0'), 50);
-                }
-                if (activePanel === panelTerms) {
-                    termItems.forEach((item, index) => {
-                        setTimeout(() => item.classList.add('visible'), index * 100);
-                    });
-                } else {
-                    termItems.forEach(item => item.classList.remove('visible'));
-                }
+        function switchTab(activeTab, inactiveTab, activePanel) {
+            activeTab.classList.add('active');
+            activeTab.classList.remove('text-gray-400');
+            inactiveTab.classList.remove('active');
+            inactiveTab.classList.add('text-gray-400');
+            [panelForm, panelReview, panelTerms].forEach(p => p.classList.add('hidden', 'opacity-0'));
+            activePanel.classList.remove('hidden');
+            setTimeout(() => activePanel.classList.remove('opacity-0'), 50);
+            if (activePanel === panelTerms) {
+                termItems.forEach((item, index) => {
+                    setTimeout(() => item.classList.add('visible'), index * 100);
+                });
+            } else {
+                termItems.forEach(item => item.classList.remove('visible'));
             }
-            tabForm.addEventListener('click', () => switchTab(tabForm, tabTerms, panelForm));
-            tabTerms.addEventListener('click', () => switchTab(tabTerms, tabForm, panelTerms));
-            viewTermsLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                switchTab(tabTerms, tabForm, panelTerms);
-            });
         }
+        tabForm.addEventListener('click', () => switchTab(tabForm, tabTerms, panelForm));
+        tabTerms.addEventListener('click', () => switchTab(tabTerms, tabForm, panelTerms));
+        viewTermsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchTab(tabTerms, tabForm, panelTerms);
+        });
         
-        // --- PARALLAX DO HERO (só roda se o hero existir) ---
+        // --- PARALLAX DO HERO ---
         const heroContent = document.getElementById('hero-content');
-        if(heroContent) {
-            window.addEventListener('mousemove', (e) => {
-                if (window.innerWidth < 768) return;
-                const x = (e.clientX - window.innerWidth / 2) / 50;
-                const y = (e.clientY - window.innerHeight / 2) / 50;
-                heroContent.style.transform = `translate(${-x}px, ${-y}px)`;
-            });
-        }
+        window.addEventListener('mousemove', (e) => {
+            if (window.innerWidth < 768) return;
+            const x = (e.clientX - window.innerWidth / 2) / 50;
+            const y = (e.clientY - window.innerHeight / 2) / 50;
+            heroContent.style.transform = `translate(${-x}px, ${-y}px)`;
+        });
 
-        // --- LÓGICA DO FORMULÁRIO E REVISÃO (só roda se o form existir) ---
+        // --- LÓGICA DO FORMULÁRIO E REVISÃO ---
         const form = document.getElementById('recruitment-form');
-        if(form) {
-            const successOverlay = document.getElementById('submission-success');
-            const reviewButton = document.getElementById('review-button');
-            const editButton = document.getElementById('edit-button');
-            const submitButton = document.getElementById('submit-button');
+        const successOverlay = document.getElementById('submission-success');
+        const reviewButton = document.getElementById('review-button');
+        const editButton = document.getElementById('edit-button');
+        const submitButton = document.getElementById('submit-button');
+        
+        // ESTA FUNÇÃO ESTÁ CORRETA E FOI MANTIDA (ELA MOSTRA O PAINEL DE REVISÃO)
+        reviewButton.addEventListener('click', async () => {
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            reviewButton.textContent = 'Buscando...';
+            reviewButton.disabled = true;
+            const username = document.getElementById('nome').value;
+            let profileData = null;
+            try {
+                const userResponse = await fetch(`https://www.habbo.com.br/api/public/users?name=${username}`);
+                if (!userResponse.ok) throw new Error('User not found');
+                const userData = await userResponse.json();
+                if (userData.error) throw new Error(userData.error);
+                const profileResponse = await fetch(`https://www.habbo.com.br/api/public/users/${userData.uniqueId}/profile`);
+                if (!profileResponse.ok) throw new Error('Profile not found');
+                profileData = await profileResponse.json();
+            } catch (error) {
+                console.error("Habbo API Error:", error);
+            }
             
-            reviewButton.addEventListener('click', async () => {
-                if (!form.checkValidity()) {
-                    form.reportValidity();
-                    return;
-                }
-                reviewButton.textContent = 'Buscando...';
-                reviewButton.disabled = true;
-                const username = document.getElementById('nome').value;
-                let profileData = null;
-                try {
-                    const userResponse = await fetch(`https://www.habbo.com.br/api/public/users?name=${username}`);
-                    if (!userResponse.ok) throw new Error('User not found');
-                    const userData = await userResponse.json();
-                    if (userData.error) throw new Error(userData.error);
-                    const profileResponse = await fetch(`https://www.habbo.com.br/api/public/users/${userData.uniqueId}/profile`);
-                    if (!profileResponse.ok) throw new Error('Profile not found');
-                    profileData = await profileResponse.json();
-                } catch (error) {
-                    console.error("Habbo API Error:", error);
-                }
-                document.getElementById('review-name').textContent = document.getElementById('nome').value;
-                document.getElementById('review-discord').textContent = document.getElementById('discord').value;
-                document.getElementById('review-gmail').textContent = document.getElementById('gmail').value;
-                const whatsappValue = document.getElementById('whatsapp').value;
-                document.getElementById('review-whatsapp-wrapper').style.display = whatsappValue ? 'block' : 'none';
-                document.getElementById('review-whatsapp').textContent = whatsappValue;
-                const areaSelect = document.getElementById('area');
-                document.getElementById('review-area').textContent = areaSelect.options[areaSelect.selectedIndex].text;
-                document.getElementById('review-motivo').textContent = document.getElementById('motivo').value;
-                document.getElementById('review-experiencia').textContent = document.getElementById('experiencia').value;
-                document.getElementById('review-avatar-image').src = `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${username}&action=std&direction=3&head_direction=3&gesture=sml&size=l`;
-                document.getElementById('review-motto').textContent = profileData ? `"${profileData.user.motto}"` : '(Não foi possível buscar a missão)';
-                
-                const panelForm = document.getElementById('panel-form');
-                const panelReview = document.getElementById('panel-review');
-                panelForm.classList.add('form-transition-out');
-                setTimeout(() => {
-                    panelForm.classList.add('hidden');
-                    panelReview.classList.remove('hidden');
-                    setTimeout(() => panelReview.classList.add('form-transition-in'), 50);
-                }, 500);
-                reviewButton.textContent = 'Revisar Informações';
-                reviewButton.disabled = false;
-            });
-
-            editButton.addEventListener('click', () => {
-                const panelForm = document.getElementById('panel-form');
-                const panelReview = document.getElementById('panel-review');
-                panelReview.classList.remove('form-transition-in');
-                panelReview.classList.add('form-transition-out');
-                setTimeout(() => {
-                    panelReview.classList.add('hidden');
-                    panelForm.classList.remove('hidden');
-                    setTimeout(() => panelForm.classList.remove('form-transition-out'), 50);
-                }, 500);
-            });
+            // Este bloco preenche os dados na tela de revisão
+            document.getElementById('review-name').textContent = document.getElementById('nome').value;
+            document.getElementById('review-discord').textContent = document.getElementById('discord').value;
+            document.getElementById('review-gmail').textContent = document.getElementById('gmail').value;
+            const whatsappValue = document.getElementById('whatsapp').value;
+            document.getElementById('review-whatsapp-wrapper').style.display = whatsappValue ? 'block' : 'none';
+            document.getElementById('review-whatsapp').textContent = whatsappValue;
+            const areaSelect = document.getElementById('area');
+            document.getElementById('review-area').textContent = areaSelect.options[areaSelect.selectedIndex].text;
+            document.getElementById('review-motivo').textContent = document.getElementById('motivo').value;
+            document.getElementById('review-experiencia').textContent = document.getElementById('experiencia').value;
+            document.getElementById('review-avatar-image').src = `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${username}&action=std&direction=3&head_direction=3&gesture=sml&size=l`;
+            document.getElementById('review-motto').textContent = profileData ? `"${profileData.user.motto}"` : '(Não foi possível buscar a missão)';
             
-            submitButton.addEventListener('click', async () => {
-                const originalButtonText = submitButton.innerHTML;
-                submitButton.disabled = true;
-                submitButton.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Enviando...`;
-                
-                const webhookUrl = "https://script.google.com/macros/s/AKfycbwEcB4NgfEyZ240jYlW5vSywA3DAg51d7bGpOsm-UsWuq9WJFdClKgKnOTvfwtCFR-1/exec";
-                const formData = new FormData(form);
-                const data = {
-                    nome: formData.get('Nome in-game'),
-                    discord: formData.get('Discord'),
-                    gmail: formData.get('Gmail'),
-                    whatsapp: formData.get('WhatsApp').trim(),
-                    area: formData.get('Área de Interesse'),
-                    motivo: formData.get('Motivo'),
-                    experiencia: formData.get('Experiência Anterior'),
-                    avatarUrl: document.getElementById('review-avatar-image').src
-                };
+            // Este bloco faz a transição dos painéis
+            panelForm.classList.add('form-transition-out');
+            setTimeout(() => {
+                panelForm.classList.add('hidden');
+                panelReview.classList.remove('hidden');
+                setTimeout(() => panelReview.classList.add('form-transition-in'), 50);
+            }, 500);
+            reviewButton.textContent = 'Revisar Informações';
+            reviewButton.disabled = false;
+        });
 
-                try {
-                    const response = await fetch(webhookUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data) 
-                    });
-                    
-                    if (response.ok) {
-                        successOverlay.classList.remove('hidden');
-                        setTimeout(() => successOverlay.classList.add('visible'), 10);
+        // ESTA FUNÇÃO TAMBÉM FOI MANTIDA (BOTÃO DE EDITAR)
+        editButton.addEventListener('click', () => {
+            panelReview.classList.remove('form-transition-in');
+            panelReview.classList.add('form-transition-out');
+            setTimeout(() => {
+                panelReview.classList.add('hidden');
+                panelForm.classList.remove('hidden');
+                setTimeout(() => panelForm.classList.remove('form-transition-out'), 50);
+            }, 500);
+        });
+        
+        // ================== APENAS ESTA FUNÇÃO FOI MODIFICADA ==================
+        submitButton.addEventListener('click', async () => {
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Enviando...`;
+            
+            // MUDANÇA 1: URL do Apps Script
+            const webhookUrl = "https://script.google.com/macros/s/AKfycbwEcB4NgfEyZ240jYlW5vSywA3DAg51d7bGpOsm-UsWuq9WJFdClKgKnOTvfwtCFR-1/exec";
+            
+            const formData = new FormData(form);
+            
+            // Este objeto 'data' é o que será enviado para o Apps Script
+            const data = {
+                nome: formData.get('Nome in-game'),
+                discord: formData.get('Discord'),
+                gmail: formData.get('Gmail'),
+                whatsapp: formData.get('WhatsApp').trim(),
+                area: formData.get('Área de Interesse'),
+                motivo: formData.get('Motivo'),
+                experiencia: formData.get('Experiência Anterior'),
+                avatarUrl: document.getElementById('review-avatar-image').src // Pega a URL do avatar já carregada
+            };
+
+            // MUDANÇA 2: Blocos 'embedFields' e 'payload' REMOVIDOS
+            // (O Apps Script cuida disso)
+
+            try {
+                // MUDANÇA 3: O 'body' agora envia 'data'
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data) 
+                });
+                
+                if (response.ok) {
+                    successOverlay.classList.remove('hidden');
+                    setTimeout(() => successOverlay.classList.add('visible'), 10);
+                    setTimeout(() => {
+                        successOverlay.classList.remove('visible');
                         setTimeout(() => {
-                            successOverlay.classList.remove('visible');
-                            setTimeout(() => {
-                                successOverlay.classList.add('hidden');
-                                form.reset();
-                                document.getElementById('terms-checkbox').checked = false;
-                                editButton.click();
-                            }, 500);
-                        }, 3000);
-                    } else {
-                        alert('Houve um problema ao enviar sua inscrição. Por favor, tente novamente.');
-                    }
-                } catch (error) {
-                    console.error('Fetch Error:', error);
-                    alert('Ocorreu um erro de conexão. Verifique sua internet e tente novamente.');
-                } finally {
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = originalButtonText;
+                            successOverlay.classList.add('hidden');
+                            form.reset();
+                            document.getElementById('terms-checkbox').checked = false;
+                            editButton.click(); // Volta para o formulário
+                        }, 500);
+                    }, 3000);
+                } else {
+                    alert('Houve um problema ao enviar sua inscrição. Por favor, tente novamente.');
                 }
-            });
-        }
+            } catch (error) {
+                console.error('Fetch Error:', error);
+                alert('Ocorreu um erro de conexão. Verifique sua internet e tente novamente.');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+            }
+        });
 
         // --- SCROLL SUAVE ---
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const targetElement = document.querySelector(this.getAttribute('href'));
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
-                }
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
             });
         });
 
+        // --- AJUSTE DE CANVAS NO RESIZE ---
+        window.addEventListener('resize', () => {
+            setupCanvas();
+            initParticles();
+            setupBgCanvas();
+        });
     });
-    //]]>
     </script>
-
 </body>
 </html>
